@@ -2,10 +2,7 @@
  * This template is valid both in C and in C++,
  * so you can expand it with code from both languages.
 
-    * TODO: 
-    *   Solve timed out.
-    *   Current complexity:
-    *   O( ( N-k )*k )
+ * Current Complexity: Θ ( N )
  */
 
 #include <stdio.h>
@@ -30,18 +27,29 @@ int main ( void ) {
     for ( int i = 0; i < muffinAmount; i++ ) 
         scanf( "%d", &muffins[ i ] );
 
-    // Miglior sapore sommato disponibile
-    int bestTaste = INT_MIN;
+    
 
     int muffinOffset = muffinAmount - groupSize;
 
-    int currentTaste;
-    for ( int i = 0; i <= muffinOffset; i++ ) {
-        currentTaste = 0;
-        for ( int j = i; j < groupSize + i; j++ ) {
-            currentTaste += muffins[ j ];
-        }
+    int currentTaste = 0;
+    for ( int i = 0; i < groupSize; i++ ) {
+        currentTaste += muffins[i];
+    }
 
+    // Miglior sapore sommato disponibile
+    int bestTaste = currentTaste;
+
+    for ( int i = groupSize; i < muffinAmount; i++ ) {
+        /**
+            Rimosso il primo elemento della precendente somma
+        **/
+        currentTaste = currentTaste - muffins [ i - groupSize ];
+
+        /**
+            Sommare l'elemento successivo
+        **/
+        currentTaste = currentTaste + muffins [ i ];
+        
         if ( currentTaste > bestTaste )
             bestTaste = currentTaste;
     }

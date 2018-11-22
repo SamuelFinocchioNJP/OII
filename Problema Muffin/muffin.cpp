@@ -27,10 +27,7 @@ int main ( void ) {
     for ( int i = 0; i < muffinAmount; i++ ) 
         scanf( "%d", &muffins[ i ] );
 
-    
-
-    int muffinOffset = muffinAmount - groupSize;
-
+    // Sommiamo la prima fila di muffin di ( dimensione pala ) volte
     int currentTaste = 0;
     for ( int i = 0; i < groupSize; i++ ) {
         currentTaste += muffins[i];

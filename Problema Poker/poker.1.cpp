@@ -29,8 +29,8 @@ int main ( void ) {
     /**
         Denaro utilizzabile per l'iscrizione ai tornei
     **/
-    int currentBalanceStored;
-    assert ( 1 == scanf( "%d", &currentBalanceStored ) );
+    int currentBalance;
+    assert ( 1 == scanf( "%d", &currentBalance ) );
 
     /**
         Tornei disponibili ( VLA )
@@ -51,64 +51,54 @@ int main ( void ) {
     **/
     std::sort ( availableTournaments, availableTournaments + tournamentsAmount, byDateTime );
     
-
     /** 
         Torneo da svolgere 
     **/
     Tournament todo;
-    int currentBalance;
-    int bestBalance = currentBalanceStored;
-    do {
-        currentBalance = currentBalanceStored;
-        for ( int i = 0; i < tournamentsAmount; i ++ ) {
-            /**
-                Verifichiamo i tornei con date incidenti
-            **/
-            
-            // Se posso svolegere il seguente torneo
-            if ( availableTournaments [ i ].costoIscrizione <= currentBalance ) {
-                todo = availableTournaments [ i ];
-                // Controllo se c'è di meglio nella stessa fascia oraria
-                int j = i;
+    for ( int i = 0; i < tournamentsAmount; i ++ ) {
+        /**
+            Verifichiamo i tornei con date incidenti
+        **/
+        
+        // Se posso svolegere il seguente torneo
+        if ( availableTournaments [ i ].costoIscrizione <= currentBalance ) {
+            todo = availableTournaments [ i ];
+            // Controllo se c'è di meglio nella stessa fascia oraria
+            int j = i;
 
-                // Finchè trovo collisioni tra il torneo scelto e i tornei successivi
-                while ( isOverlapping ( todo, availableTournaments [ j + 1 ] ) && ( j + 1 ) < tournamentsAmount ) {
-                    // Se posso svolgere anche il torneo j + 1
-                    if ( availableTournaments [ j + 1 ].costoIscrizione <= currentBalance ) 
-                        // Se trovo un torneo in collisione più proficuo
-                        if ( !( todo == getHighestAward ( todo, availableTournaments [ j + 1 ] ) ) ) {
-                            // Sostituico il torneo da svolgere
-                            todo = getHighestAward ( todo, availableTournaments [ j + 1 ] );
-                        }
-                    
-                    /**
-                        Mando avanti il contatore per continuare a trovare di meglio
-                        tra i tornei in collisione
-                    **/
-                    j ++;
-                }
-
-                /** 
-                    Una volta scelto il torneo migliore
-                    svolgo il torneo scelto.
-                **/
-                currentBalance = currentBalance + ( todo.premio - todo.costoIscrizione );
-                printf ( "pos: [%d] %d\n", i, currentBalance );
-                if ( currentBalance > bestBalance )
-                    bestBalance = currentBalance;
-
+            // Finchè trovo collisioni tra il torneo scelto e i tornei successivi
+            while ( isOverlapping ( todo, availableTournaments [ j + 1 ] ) && ( j + 1 ) < tournamentsAmount ) {
+                // Se posso svolgere anche il torneo j + 1
+                if ( availableTournaments [ j + 1 ].costoIscrizione <= currentBalance ) 
+                    // Se trovo un torneo in collisione più proficuo
+                    if ( !( todo == getHighestAward ( todo, availableTournaments [ j + 1 ] ) ) ) {
+                        // Sostituico il torneo da svolgere
+                        todo = getHighestAward ( todo, availableTournaments [ j + 1 ] );
+                    }
+                
                 /**
-                    Continuo a controllare da quel torneo in poi
+                    Mando avanti il contatore per continuare a trovare di meglio
+                    tra i tornei in collisione
                 **/
-                i = j;
+                j ++;
             }
+
+            /** 
+                Una volta scelto il torneo migliore
+                svolgo il torneo scelto.
+            **/
+            currentBalance = currentBalance + ( todo.premio - todo.costoIscrizione );
+
+            /**
+                Continuo a controllare da quel torneo in poi
+            **/
         }
-    } while ( std::next_permutation( availableTournaments, availableTournaments + tournamentsAmount, byDateTime ) ) ;
-    
+    }
+
     /**
         Restituisco ciò che ho guadagnato
     **/
-    printf ( "%d\n", bestBalance );
+    printf ( "%d\n", currentBalance );
     return 0;
 }
 

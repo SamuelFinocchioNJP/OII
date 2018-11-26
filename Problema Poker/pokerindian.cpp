@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string.h>
 
-#define DEBUB
+#define NODEBUB
 
 typedef struct {
 	int giornoTorneo;
@@ -13,7 +13,6 @@ typedef struct {
 	int premio;
 } Tournament;
 
-bool operator == (const Tournament, const Tournament);
 bool isOverlapping(Tournament, Tournament);
 Tournament getHighestAward(Tournament, Tournament);
 bool byDateTime(Tournament, Tournament);
@@ -151,12 +150,21 @@ int main(void) {
 						printf("BACKTRACK: %d [%d]\n", tournamentValues[i], i);
 #endif
 
-					int hipValue = tournamentValues[currentDailyTurnament]
-						+ availableTournaments[currentTournament].premio
-						- availableTournaments[currentTournament].costoIscrizione;
+						if(canDo(availableTournaments[currentTournament],tournamentValues[currentDailyTournament]))
+						{
+				
+							int hipValue = tournamentValues[currentDailyTurnament]
+								+ availableTournaments[currentTournament].premio
+								- availableTournaments[currentTournament].costoIscrizione;
 
-					if (hipValue > tournamentValues[currentTournament])
+							if (hipValue > tournamentValues[currentTournament])
 						tournamentValues[currentTournament] = hipValue;
+						}else
+						{
+							if(tournamentValues[currentTournament] == 0)
+								tournamentValues[currentTournament] = -1;
+						}
+				
 				}
 				else {
 					if (canDo(availableTournaments[currentTournament], currentBalanceBackup)) {
@@ -167,7 +175,8 @@ int main(void) {
 						tournamentValues[ currentTournament ] = hipValue;
 					}
 					else {
-						tournamentValues[currentTournament] = -1;
+						if(tournamentValues[currentTournament] == 0)
+							tournamentValues[currentTournament] = -1;
 					}
 				}
 			}
@@ -180,7 +189,8 @@ int main(void) {
 						tournamentValues[ currentTournament ] = hipValue;					
 				}
 				else {
-					tournamentValues[currentTournament] = -1;
+					if(tournamentValues[currentTournament] == 0)
+						tournamentValues[currentTournament] = -1;
 				}
 			}
 		}
@@ -231,16 +241,6 @@ Tournament getHighestAward(Tournament t1, Tournament t2) {
 	if (awardT1 > awardT2)
 		return t1;
 	return t2;
-}
-
-bool operator == (const Tournament t1, const Tournament t2) {
-	if (t1.giornoTorneo == t2.giornoTorneo      &&
-		t1.oraInizio == t2.oraInizio         &&
-		t1.oraFine == t2.oraFine           &&
-		t1.costoIscrizione == t2.costoIscrizione   &&
-		t1.premio == t2.premio)
-		return true;
-	return false;
 }
 
 bool byDateTime(Tournament t1, Tournament t2) {

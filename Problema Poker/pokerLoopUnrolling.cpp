@@ -10,6 +10,8 @@
 
 #define MAXIMUM_HOURS 1001
 
+
+
 struct Tournament {
     int day;
     int startingTime;
@@ -17,6 +19,19 @@ struct Tournament {
     int buyIn;
     int prize;
 };
+
+bool canDo(Tournament t1, int currentBalance) {
+    return t1.buyIn <= currentBalance;
+}
+
+bool isOverlapping(Tournament t1, Tournament t2) {
+    /**
+    	Verifica se tra 2 tornei c'è una collisione di orari e giornata
+    **/
+    if (t1.day == t2.day)
+        return t1.startingTime < t2.endingTime && t2.startingTime < t1.endingTime;
+    return false;
+}
 
 bool byDateTime ( Tournament t1, Tournament t2 ) {
 	if (t1.day == t2.day) {
@@ -100,8 +115,10 @@ int main ( void ) {
             Ho un guadagno superiore
         **/
         if ( tournamentValues [ backtrackingTournament ] >= tournaments [ currentTournament ].buyIn 
-            && tournamentValues [ tournaments [ currentTournament ].endingTime ] < tournamentValues [ backtrackingTournament ] + tournaments [ currentTournament ].prize ) {
-                tournamentValues [ tournaments [ currentTournament ].endingTime ] = tournamentValues [ backtrackingTournament ] + tournaments [ currentTournament ].prize;
+            && tournamentValues [ tournaments [ currentTournament ].endingTime ] < tournamentValues [ backtrackingTournament ] + tournaments [ currentTournament ].prize 
+			&& !isOverlapping(tournaments[currentTournament],tournaments[backtrackingTournament]) ) {
+                tournamentValues [ tournaments [ currentTournament ].endingTime ] = tournamentValues [ backtrackingTournament ] + tournaments [ currentTournament ].prize
+			
                 num [  tournaments [ currentTournament ].endingTime ] = num [ backtrackingTournament ] + 1; // update tournamentValues of the end
         }
     }

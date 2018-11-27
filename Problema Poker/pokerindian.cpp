@@ -3,8 +3,6 @@
 #include <algorithm> 
 #include <string.h>
 
-#define NODEBUB
-
 typedef struct {
     int giornoTorneo;
     int oraInizio;
@@ -79,8 +77,7 @@ int main(void) {
 
     int currentBalanceBackup = currentBalance;
     /**
-     *  Per ogni torneo:
-     *       Se siamo nello stesso giorno:
+     *  Weighted Job Algorithm :^)
      */
     for (int currentTournament = 1; currentTournament < tournamentsAmount; currentTournament++) {
 
@@ -172,6 +169,7 @@ bool isOverlapping(Tournament t1, Tournament t2) {
         return t1.oraInizio < t2.oraFine && t2.oraInizio < t1.oraFine;
     return false;
 }
+
 
 bool canDo(Tournament t1, int currentBalance) {
     return t1.costoIscrizione <= currentBalance;

@@ -56,16 +56,16 @@ int main(void) {
     	If nothing is overlapping 
     	OPTIMIZATION
     **/
-    bool noOverlap = true;
+    bool Overlap = false;
     for ( int i = 0; i < tournamentsAmount  - 1; i++ ) {
     	if ( isOverlapping ( availableTournaments[i], availableTournaments [ i + 1 ] ) ) {
-    		noOverlap = false;
+    		Overlap = true;
     		break;
 		}
 	}
 	
 	
-	if ( noOverlap ) {
+	if ( !Overlap ) {
 		for ( int i = 0; i < tournamentsAmount; i++ ) {
 			if ( canDo(availableTournaments[i], currentBalance ) ) {
 				currentBalance += availableTournaments [ i ].premio - availableTournaments [ i ].costoIscrizione;

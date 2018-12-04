@@ -16,8 +16,8 @@ using namespace std;
 int N;
 
 typedef struct {
-	 int x;
-	 int y;
+	 long long x;
+	 long long y;
 }Vertex;
 
 
@@ -32,7 +32,7 @@ int main() {
     Vertex vertexes[N];
     
     for (int i=0; i<N; i++){
-    	assert(2 == scanf("%d %d", &vertexes[i].x, &vertexes[i].y));
+    	assert(2 == scanf("%lld %lld", &vertexes[i].x, &vertexes[i].y));
 	}
         
     long long partial_area = 0;
@@ -59,7 +59,7 @@ int main() {
     area -= partial_area;
 	
     area = abs(area);
-    area = (long long)area / 2;
+    area = ((long long)area + 1) / (long long)2;
     
     printf("%lld\n", area);
     return 0;
